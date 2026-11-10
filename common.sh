@@ -11,17 +11,22 @@ N="\e[0m"
 
 user_id=$(id -u)
 
-if [ $user_id -ne 0 ]; then
-  echo "please run this script with sudo access"
-  exit 1
-fi
-
-mkdir -p $log_folder                                                  #creating log_folder if not
+check_root(){
+   if [ $user_id -ne 0 ]; then
+      echo "please run this script with sudo access"
+      exit 1
+   fi
+}
 
 #Adding time stamp
 timestamp(){
     date "+%F %T"
 }
+
+mkdir -p $log_folder                                                  #creating log_folder if not
+
+#Starting Time
+echo  "$(timestamp) [INFO] ===== script started Execution =====" | tee -a $log_file
 
 #function
 
@@ -34,10 +39,9 @@ validate(){
     fi
 }
 
-#Starting Time
-echo  "$(timestamp) [INFO] ===== script started Execution =====" | tee -a $log_file
 
 #End Time
+
 total_time(){
   echo -e "$(timestamp) [INFO] Script completed in $SECONDS seconds"
   echo -e "$(timestamp) [INFO] ===== script completed execution =====" | tee -a $log_file
